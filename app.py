@@ -80,8 +80,7 @@ def load():
                     "name": data.get('CsName', None),
                     "cores": data.get("CsNumberOfLogicalProcessors", 0) / 2,
                     "threads": data.get("CsNumberOfLogicalProcessors", None),
-                    "ram": data.get("OsTotalVisibleMemorySize", None),
-                    "disk": disk_size
+                    "ram": data.get("OsTotalVisibleMemorySize", None)
                 })
 
             for vm in data.get('VMs', {}).get('value', []):

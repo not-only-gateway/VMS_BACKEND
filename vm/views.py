@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 from api.api import ApiView
 from app import app
 from app import db
@@ -19,28 +19,32 @@ apiHD = ApiView(class_instance=HardDrive, identifier_attr='id', relationships=[{
 
 apiH = ApiView(class_instance=HostVM, identifier_attr='name', relationships=[], db=db)
 
-
+@app.route('/api/host/<e_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/host', methods=['POST'])
+def host(e_id=None):
+    if request.method == 'GET':
+        return apiH.get(entity_id=e_id)
+    elif request.method == 'PUT':
+        return apiH.put(entity_id=e_id, package=request.json)
 @app.route('/api/list/host', methods=['GET'])
 def list_host():
-    return apiH.list(request.args)
+    return apiH.list(data=request.args)
 
 
-@app.route('/api/host/<e_id>', methods=['GET'])
-def host(e_id=None):
-    return apiH.get(entity_id=e_id)
-
-
-@app.route('/api/list/vm', methods=['GET'])
-def list_vm():
-    return api.list(request.args)
-
-
-@app.route('/api/vm/<e_id>', methods=['GET', 'PUT'])
+@app.route('/api/vm/<e_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/vm', methods=['POST'])
 def vm(e_id=None):
     if request.method == 'GET':
         return api.get(entity_id=e_id)
     elif request.method == 'PUT':
         return api.put(entity_id=e_id, package=request.json)
+
+
+@app.route('/api/list/vm', methods=['GET'])
+def list_vm():
+    return api.list(data=request.args)
+
+
 
 
 @app.route('/api/rede_vm/<id_vm>', methods=['GET'])
